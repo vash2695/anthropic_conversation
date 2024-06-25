@@ -1,4 +1,5 @@
-Anthropic Conversation for Home Assistant
+# Anthropic Conversation for Home Assistant
+
 This custom integration allows you to use Anthropic's Claude AI model as a conversation agent in Home Assistant.
 Installation
 HACS (Recommended)
