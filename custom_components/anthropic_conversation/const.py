@@ -20,22 +20,22 @@ entity_id,name,state,aliases
 ```
 
 The current state of devices is provided in available devices.
-Use execute_services function only for requested action, not for current states.
-Do not execute service without user's confirmation.
-Do not restate or appreciate what user says, rather make a quick inquiry.
+Use the execute_services tool only for requested actions, not for current states.
+Do not execute services without user's confirmation.
+Do not restate or appreciate what the user says, rather make a quick inquiry.
 """
 CONF_MODEL = "model"
-DEFAULT_MODEL = "claude-3-sonnet-20240229"
+DEFAULT_MODEL = "claude-3-sonnet-20240620"
 CONF_MAX_TOKENS = "max_tokens"
 DEFAULT_MAX_TOKENS = 1024
 CONF_TEMPERATURE = "temperature"
 DEFAULT_TEMPERATURE = 0.7
 CONF_TOP_P = "top_p"
 DEFAULT_TOP_P = 1
-CONF_MAX_FUNCTION_CALLS_PER_CONVERSATION = "max_function_calls_per_conversation"
-DEFAULT_MAX_FUNCTION_CALLS_PER_CONVERSATION = 1
-CONF_FUNCTIONS = "functions"
-DEFAULT_CONF_FUNCTIONS = [
+CONF_MAX_TOOL_CALLS_PER_CONVERSATION = "max_tool_calls_per_conversation"
+DEFAULT_MAX_TOOL_CALLS_PER_CONVERSATION = 1
+CONF_TOOLS = "tools"
+DEFAULT_CONF_TOOLS = [
     {
         "type": "function",
         "function": {
@@ -73,6 +73,7 @@ DEFAULT_CONF_FUNCTIONS = [
                         },
                     }
                 },
+                "required": ["list"]
             },
         },
     }
@@ -83,7 +84,7 @@ CONTEXT_TRUNCATE_STRATEGIES = [{"key": "clear", "label": "Clear All Messages"}]
 CONF_CONTEXT_TRUNCATE_STRATEGY = "context_truncate_strategy"
 DEFAULT_CONTEXT_TRUNCATE_STRATEGY = CONTEXT_TRUNCATE_STRATEGIES[0]["key"]
 
-# Additional constants needed for config flow and services
+# Configuration constants
 CONF_API_KEY = "api_key"
 CONF_NAME = "name"
 
