@@ -46,6 +46,7 @@ from .const import (
     DEFAULT_CONF_TOOLS,
     DOMAIN,
 )
+from .exceptions import CannotConnect, InvalidAuth
 from .helpers import validate_authentication
 
 _LOGGER = logging.getLogger(__name__)
@@ -93,10 +94,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         try:
-            await validate_input(self.hass, user_input)
-        except APIConnectionError:
+            await validate_authentication(self.hass, user_input)
+        except CannotConnect:
             errors["base"] = "cannot_connect"
-        except APIStatusError:
+        except InvalidAuth:
             errors["base"] = "invalid_auth"
         except Exception:  # pylint: disable=broad-except
             _LOGGER.exception("Unexpected exception")

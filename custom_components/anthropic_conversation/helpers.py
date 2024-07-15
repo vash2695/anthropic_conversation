@@ -9,7 +9,6 @@ import voluptuous as vol
 from homeassistant.components import conversation
 from homeassistant.components.homeassistant.exposed_entities import async_should_expose
 from homeassistant.core import HomeAssistant, State
-from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.template import Template
@@ -22,6 +21,8 @@ from .exceptions import (
     EntityNotFound,
     FunctionNotFound,
     InvalidFunction,
+    CannotConnect,
+    InvalidAuth,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -32,9 +33,9 @@ async def validate_authentication(hass: HomeAssistant, api_key: str) -> None:
     try:
         await client.models.list()
     except APIStatusError as err:
-        raise HomeAssistantError(f"Invalid API key: {err}") from err
+        raise InvalidAuth(f"Invalid API key: {err}") from err
     except (APIConnectionError, APITimeoutError) as err:
-        raise HomeAssistantError(f"Unable to connect to Anthropic API: {err}") from err
+        raise CannotConnect(f"Unable to connect to Anthropic API: {err}") from err
 
 def get_exposed_entities(hass: HomeAssistant):
     """Get the exposed entities."""
@@ -156,7 +157,7 @@ class NativeFunctionExecutor(FunctionExecutor):
         if entity_id is None:
             raise CallServiceError(domain, service, service_data)
         if not hass.services.has_service(domain, service):
-            raise HomeAssistantError(f"Service {domain}.{service} not found")
+            raise FunctionNotFound(f"Service {domain}.{service} not found")
         self.validate_entity_ids(hass, entity_id or [], exposed_entities)
 
         try:
@@ -166,7 +167,7 @@ class NativeFunctionExecutor(FunctionExecutor):
                 service_data=service_data,
             )
             return {"success": True}
-        except HomeAssistantError as e:
+        except Exception as e:
             _LOGGER.error(e)
             return {"error": str(e)}
 
