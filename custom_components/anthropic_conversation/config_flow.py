@@ -27,8 +27,8 @@ from .const import (
     CONF_MODEL,
     CONF_CONTEXT_THRESHOLD,
     CONF_CONTEXT_TRUNCATE_STRATEGY,
-    CONF_FUNCTIONS,
-    CONF_MAX_FUNCTION_CALLS_PER_CONVERSATION,
+    CONF_TOOLS,
+    CONF_MAX_TOOL_CALLS_PER_CONVERSATION,
     CONF_MAX_TOKENS,
     CONF_PROMPT,
     CONF_TEMPERATURE,
@@ -36,13 +36,14 @@ from .const import (
     CONTEXT_TRUNCATE_STRATEGIES,
     DEFAULT_CONTEXT_THRESHOLD,
     DEFAULT_CONTEXT_TRUNCATE_STRATEGY,
-    DEFAULT_MAX_FUNCTION_CALLS_PER_CONVERSATION,
+    DEFAULT_MAX_TOOL_CALLS_PER_CONVERSATION,
     DEFAULT_MAX_TOKENS,
     DEFAULT_MODEL,
     DEFAULT_NAME,
     DEFAULT_PROMPT,
     DEFAULT_TEMPERATURE,
     DEFAULT_TOP_P,
+    DEFAULT_CONF_TOOLS,
     DOMAIN,
 )
 from .helpers import validate_authentication
@@ -61,10 +62,10 @@ DEFAULT_OPTIONS = types.MappingProxyType(
         CONF_PROMPT: DEFAULT_PROMPT,
         CONF_MODEL: DEFAULT_MODEL,
         CONF_MAX_TOKENS: DEFAULT_MAX_TOKENS,
-        CONF_MAX_FUNCTION_CALLS_PER_CONVERSATION: DEFAULT_MAX_FUNCTION_CALLS_PER_CONVERSATION,
+        CONF_MAX_TOOL_CALLS_PER_CONVERSATION: DEFAULT_MAX_TOOL_CALLS_PER_CONVERSATION,
         CONF_TOP_P: DEFAULT_TOP_P,
         CONF_TEMPERATURE: DEFAULT_TEMPERATURE,
-        CONF_FUNCTIONS: "[]",
+        CONF_TOOLS: yaml.dump(DEFAULT_CONF_TOOLS),
         CONF_CONTEXT_THRESHOLD: DEFAULT_CONTEXT_THRESHOLD,
         CONF_CONTEXT_TRUNCATE_STRATEGY: DEFAULT_CONTEXT_TRUNCATE_STRATEGY,
     }
@@ -167,16 +168,16 @@ class OptionsFlow(config_entries.OptionsFlow):
                 default=DEFAULT_TEMPERATURE,
             ): NumberSelector(NumberSelectorConfig(min=0, max=1, step=0.05)),
             vol.Optional(
-                CONF_MAX_FUNCTION_CALLS_PER_CONVERSATION,
+                CONF_MAX_TOOL_CALLS_PER_CONVERSATION,
                 description={
-                    "suggested_value": options[CONF_MAX_FUNCTION_CALLS_PER_CONVERSATION]
+                    "suggested_value": options[CONF_MAX_TOOL_CALLS_PER_CONVERSATION]
                 },
-                default=DEFAULT_MAX_FUNCTION_CALLS_PER_CONVERSATION,
+                default=DEFAULT_MAX_TOOL_CALLS_PER_CONVERSATION,
             ): int,
             vol.Optional(
-                CONF_FUNCTIONS,
-                description={"suggested_value": options[CONF_FUNCTIONS]},
-                default="[]",
+                CONF_TOOLS,
+                description={"suggested_value": options[CONF_TOOLS]},
+                default=yaml.dump(DEFAULT_CONF_TOOLS),
             ): TemplateSelector(),
             vol.Optional(
                 CONF_CONTEXT_THRESHOLD,

@@ -25,7 +25,7 @@ Do not execute services without user's confirmation.
 Do not restate or appreciate what the user says, rather make a quick inquiry.
 """
 CONF_MODEL = "model"
-DEFAULT_MODEL = "claude-3-sonnet-20240620"
+DEFAULT_MODEL = "claude-3-5-sonnet-20240620"
 CONF_MAX_TOKENS = "max_tokens"
 DEFAULT_MAX_TOKENS = 1024
 CONF_TEMPERATURE = "temperature"
