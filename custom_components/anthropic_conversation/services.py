@@ -21,7 +21,7 @@ QUERY_IMAGE_SCHEMA = vol.Schema(
                 "integration": DOMAIN,
             }
         ),
-        vol.Required("model", default="claude-3-opus-20240229"): cv.string,
+        vol.Required("model", default="DEFAULT_MODEL"): cv.string,
         vol.Required("prompt"): cv.string,
         vol.Required("images"): vol.All(cv.ensure_list, [{"url": cv.url}]),
         vol.Optional("max_tokens", default=1024): cv.positive_int,

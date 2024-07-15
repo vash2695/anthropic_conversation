@@ -43,7 +43,7 @@
                 "model": {
                     "name": "Model",
                     "description": "The model",
-                    "example": "claude-3-opus-20240229"
+                    "example": "claude-3-5-sonnet-20240620"
                 },
                 "prompt": {
                     "name": "Prompt",
