@@ -1,39 +1,60 @@
 # Anthropic Conversation for Home Assistant
 
-This custom integration allows you to use Anthropic's Claude AI model as a conversation agent in Home Assistant.
-Installation
-HACS (Recommended)
+This custom integration allows you to use Anthropic's advanced language models, particularly Claude, within your Home Assistant setup. It enables natural language interactions with your smart home devices and provides powerful AI-assisted functionalities.
 
-Make sure you have HACS installed in your Home Assistant instance.
-In the HACS panel, click on "Integrations".
-Click the "+" button in the bottom right corner.
-Search for "Anthropic Conversation" and select it.
-Click "Install" and wait for the installation to complete.
-Restart Home Assistant.
+## Features
 
-Manual Installation
+- **Natural Language Control**: Interact with your Home Assistant devices using natural language commands processed by Anthropic's Claude model.
+- **Context-Aware Conversations**: The integration maintains conversation context, allowing for more natural and coherent interactions.
+- **Customizable Prompts**: Tailor the system prompt to fit your specific needs and use cases.
+- **Function Calling**: Utilize Claude's function calling capabilities to execute Home Assistant services.
+- **Image Analysis**: Query images using Claude's vision capabilities (requires Claude 3 models with vision support).
 
-Copy the anthropic_conversation folder from this repository to your custom_components directory in your Home Assistant config directory.
-Restart Home Assistant.
+## Requirements
 
-Configuration
+- A Home Assistant installation
+- An Anthropic API key
+- Python 3.9 or higher
 
-In Home Assistant, go to Configuration > Integrations.
-Click the "+" button to add a new integration.
-Search for "Anthropic Conversation" and select it.
-Enter your Anthropic API key when prompted.
-Configure additional options as desired.
+## Configuration
 
-Usage
-Once configured, you can use the Anthropic Conversation agent in your Home Assistant conversations. You can interact with it through the conversation interface or by calling the conversation.process service with the Anthropic agent specified.
-Options
-You can customize the following options:
+The integration can be configured through the Home Assistant UI. You'll need to provide your Anthropic API key and can customize various options such as:
 
-Prompt: The system prompt used to set the context for the AI.
-Model: The Anthropic model to use (e.g., "claude-2").
-Max Tokens: The maximum number of tokens in the AI's response.
-Temperature: Controls the randomness of the AI's responses.
+- Model selection (e.g., claude-3-sonnet-20240620)
+- Maximum tokens for responses
+- Temperature and top_p settings for response generation
+- Custom system prompts
+- Tool definitions for function calling
 
-To modify these options, go to Configuration > Integrations, find the Anthropic Conversation integration, and click "Options".
-Support
-For issues, feature requests, or questions, please open an issue on GitHub.
+## Usage
+
+Once configured, you can interact with the Anthropic Conversation integration through:
+
+1. The conversation integration in Home Assistant
+2. Service calls for specific functionalities like image analysis
+
+Example conversation:
+```
+User: "Turn on the living room lights and set them to 50% brightness"
+Claude: "Certainly! I'll turn on the living room lights and set their brightness to 50%. Is there anything else you'd like me to do?"
+```
+
+## Contributing
+
+Contributions to this integration are welcome! Please read our contributing guidelines (link to be added) before submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Disclaimer
+
+This is a community project and is not officially supported by Anthropic or Home Assistant. Use at your own risk.
+
+## Support
+
+If you encounter any issues or have questions, please file an issue on our GitHub repository.
+
+---
+
+Note: This integration is in active development. Features and configurations may change. Always refer to the latest documentation for the most up-to-date information.
