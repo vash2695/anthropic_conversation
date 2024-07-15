@@ -25,3 +25,23 @@ class APIRateLimitExceeded(AnthropicError):
 
 class ServiceError(AnthropicError):
     """Error to indicate a problem with a service call."""
+
+
+class CallServiceError(AnthropicError):
+    """Error to indicate a problem with calling a service."""
+
+
+class EntityNotExposed(AnthropicError):
+    """Error to indicate that an entity is not exposed."""
+
+
+class EntityNotFound(AnthropicError):
+    """Error to indicate that an entity is not found."""
+
+
+class FunctionNotFound(AnthropicError):
+    """Error to indicate that a function is not found."""
+
+
+class InvalidFunction(AnthropicError):
+    """Error to indicate that a function is invalid."""
