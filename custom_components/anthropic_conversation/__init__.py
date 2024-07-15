@@ -33,11 +33,13 @@ from .const import (
     CONF_TEMPERATURE,
     CONF_TOP_P,
     CONF_PROMPT,
+    CONF_TOOLS,
     DEFAULT_MODEL,
     DEFAULT_MAX_TOKENS,
     DEFAULT_TEMPERATURE,
     DEFAULT_TOP_P,
     DEFAULT_PROMPT,
+    DEFAULT_CONF_TOOLS,
     DOMAIN,
     EVENT_CONVERSATION_FINISHED,
 )
@@ -229,6 +231,7 @@ class AnthropicAgent(conversation.AbstractConversationAgent):
         max_tokens = self.entry.options.get(CONF_MAX_TOKENS, DEFAULT_MAX_TOKENS)
         top_p = self.entry.options.get(CONF_TOP_P, DEFAULT_TOP_P)
         temperature = self.entry.options.get(CONF_TEMPERATURE, DEFAULT_TEMPERATURE)
+        tools = self.entry.options.get(CONF_TOOLS, DEFAULT_CONF_TOOLS)
 
         _LOGGER.info("Prompt for %s: %s", model, messages)
 
@@ -238,13 +241,50 @@ class AnthropicAgent(conversation.AbstractConversationAgent):
             max_tokens=max_tokens,
             top_p=top_p,
             temperature=temperature,
+            tools=tools,
         )
 
         _LOGGER.info("Response %s", response.model_dump())
 
+        # Handle tool calls if present
+        if response.tool_calls:
+            for tool_call in response.tool_calls:
+                tool_response = await self.execute_tool(tool_call, exposed_entities, user_input)
+                messages.append({"role": "tool", "content": json.dumps(tool_response), "tool_call_id": tool_call.id})
+            
+            # Make another API call with the tool responses
+            response = await self.client.messages.create(
+                model=model,
+                messages=messages,
+                max_tokens=max_tokens,
+                top_p=top_p,
+                temperature=temperature,
+                tools=tools,
+            )
+
         return response
 
-# Note: You'll need to implement the following:
-# - const.py with the necessary constants
-# - helpers.py with the validate_authentication function
-# - services.py with the async_setup_services function
+    async def execute_tool(self, tool_call, exposed_entities, user_input):
+        """Execute a tool call."""
+        if tool_call.function.name == "execute_services":
+            return await self.execute_services(json.loads(tool_call.function.arguments), exposed_entities, user_input)
+        else:
+            return {"error": f"Unknown tool: {tool_call.function.name}"}
+
+    async def execute_services(self, arguments, exposed_entities, user_input):
+        """Execute Home Assistant services."""
+        results = []
+        for service_call in arguments.get("list", []):
+            domain = service_call["domain"]
+            service = service_call["service"]
+            service_data = service_call["service_data"]
+            
+            try:
+                await self.hass.services.async_call(
+                    domain, service, service_data, context=user_input.context
+                )
+                results.append({"success": True, "domain": domain, "service": service})
+            except Exception as err:
+                results.append({"success": False, "domain": domain, "service": service, "error": str(err)})
+        
+        return {"results": results}
