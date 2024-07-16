@@ -1,4 +1,4 @@
-# Anthropic Conversation for Home Assistant
+# Anthropic Conversation for Home Assistant - In testing, not yet functional!
 
 This custom integration allows you to use Anthropic's advanced language models, particularly Claude, within your Home Assistant setup. It enables natural language interactions with your smart home devices and provides powerful AI-assisted functionalities.
 
